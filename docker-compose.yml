@@ -1,0 +1,45 @@
+version: '3'
+services:
+  load-balancer:
+    image: anroe/nginx-geoip2
+    volumes:
+      - ./config/load-balancer/nginx.conf:/etc/nginx/nginx.conf
+      - ./config/load-balancer/GeoLite2-Country.mmdb:/usr/share/nginx/GeoLite2-Country.mmdb
+    ports:
+      - '80:80'
+    depends_on:
+      - uk-server-1
+      - us-server-1
+      - us-server-2
+      - general-server
+      - backup-server
+  uk-server-1:
+    image: nginx
+    volumes:
+      - ./config/uk-server-1/nginx.conf:/etc/nginx/nginx.conf
+    ports:
+      - '81:81'
+  us-server-1:
+    image: nginx
+    volumes:
+      - ./config/us-server-1/nginx.conf:/etc/nginx/nginx.conf
+    ports:
+      - '82:82'
+  us-server-2:
+    image: nginx
+    volumes:
+      - ./config/us-server-2/nginx.conf:/etc/nginx/nginx.conf
+    ports:
+      - '83:83'
+  general-server:
+    image: nginx
+    volumes:
+      - ./config/general-server/nginx.conf:/etc/nginx/nginx.conf
+    ports:
+      - '84:84'
+  backup-server:
+    image: nginx
+    volumes:
+      - ./config/backup-server/nginx.conf:/etc/nginx/nginx.conf
+    ports:
+      - '85:85'
